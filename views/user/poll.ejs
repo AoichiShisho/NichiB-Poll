@@ -1,0 +1,19 @@
+<html>
+<head><title><%= poll.title %></title></head>
+<body>
+  <h1><%= poll.title %></h1>
+  <form action="/poll/<%= pollId %>/vote" method="POST">
+    <% poll.options.forEach((opt, i) => { %>
+      <div>
+        <% if(poll.multiple){ %>
+          <label><input type="checkbox" name="selected" value="<%= i %>" /> <%= opt %></label>
+        <% } else { %>
+          <label><input type="radio" name="selected" value="<%= i %>" /> <%= opt %></label>
+        <% } %>
+      </div>
+    <% }) %>
+    <button type="submit">Vote</button>
+  </form>
+</body>
+</html>
+

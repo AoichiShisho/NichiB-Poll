@@ -1,0 +1,44 @@
+<html>
+<head>
+  <title>Create Poll</title>
+  <style>
+    .option-field {
+      margin-bottom: 5px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Create Poll</h1>
+  <form method="POST" action="/create">
+    <div>
+      <label>Title: <input name="title" type="text" required /></label>
+    </div>
+    <div id="options-container">
+      <div class="option-field">
+        <input name="options[]" type="text" placeholder="Option 1" required/>
+      </div>
+      <div class="option-field">
+        <input name="options[]" type="text" placeholder="Option 2" required/>
+      </div>
+    </div>
+    <button type="button" id="add-option-btn">Add Option</button>
+    <div>
+      <label>Multiple vote allowed?: <input name="multiple" type="checkbox" /></label>
+    </div>
+    <button type="submit">Create</button>
+  </form>
+
+  <script>
+    const addOptionBtn = document.getElementById('add-option-btn');
+    const optionsContainer = document.getElementById('options-container');
+
+    addOptionBtn.addEventListener('click', () => {
+      const div = document.createElement('div');
+      div.className = 'option-field';
+      div.innerHTML = `<input name="options[]" type="text" placeholder="Another Option" required/>`;
+      optionsContainer.appendChild(div);
+    });
+  </script>
+</body>
+</html>
+

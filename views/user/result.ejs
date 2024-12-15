@@ -1,0 +1,26 @@
+<html>
+<head><title>Results for <%= poll.title %></title></head>
+<body>
+  <h1>Results: <%= poll.title %></h1>
+  <ul id="results">
+    <% poll.results.forEach((count, i) => { %>
+      <li><%= poll.options[i] %>: <span class="count"><%= count %></span></li>
+    <% }) %>
+  </ul>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script>
+    const socket = io();
+    socket.on('updateResults', (newResults) => {
+      const resultEls = document.querySelectorAll('#results li .count');
+      newResults.forEach((count, i) => {
+        resultEls[i].textContent = count;
+      });
+    });
+
+    // ページ読み込み時にサーバーへ自分が見ている投票IDを通知し、現在の結果を更新させることも可能。
+    // ここではvoteイベントで通知するなど必要に応じて。
+  </script>
+</body>
+</html>
+
