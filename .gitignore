@@ -1,0 +1,14 @@
+.DS_Store
+
+# Nodeモジュールは一般的にignore
+node_modules/
+
+# 投票結果のデータファイル（JSON）のignore
+data/*.json
+
+# publicディレクトリ内に生成されるQRコード画像ファイルのみignore
+public/qrcode_*.png
+
+# その他のログや一時ファイルがあれば適宜ignore
+*.log
+
