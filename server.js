@@ -3,25 +3,22 @@ const http = require('http');
 const { Server } = require('socket.io');
 const path = require('path');
 const fs = require('fs-extra');
+const cookieParser = require('cookie-parser');
 
 const app = express();
 const server = http.createServer(app);
 const io = new Server(server);
 
-// テンプレートエンジン
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
-
-// 静的ファイル
 app.use(express.static(path.join(__dirname, 'public')));
-app.use(express.urlencoded({extended: true}));
+app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+app.use(cookieParser()); // ←追加
 
-// ルーティング
+// ルート設定
 const adminRouter = require('./routes/admin');
 const userRouter = require('./routes/user');
-
-// エントリーポイントはadminへ
 app.use('/', adminRouter);
 app.use('/', userRouter);
 
