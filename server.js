@@ -1,3 +1,4 @@
+// server.js
 const express = require('express');
 const http = require('http');
 const { Server } = require('socket.io');
@@ -14,26 +15,21 @@ app.set('views', path.join(__dirname, 'views'));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-app.use(cookieParser()); // ←追加
+app.use(cookieParser());
 
-// ルート設定
+// adminルーターは変わらず
 const adminRouter = require('./routes/admin');
-const userRouter = require('./routes/user');
 app.use('/', adminRouter);
+
+// userルーターにioを渡す
+const userRouter = require('./routes/user')(io);
 app.use('/', userRouter);
 
 io.on('connection', (socket) => {
-  socket.on('vote', async (pollId) => {
-    const data = await fs.readJson(path.join(__dirname, 'data/polls.json'));
-    const poll = data[pollId];
-    if (poll) {
-      io.emit('updateResults', poll.results);
-    }
-  });
+  console.log('Client connected:', socket.id);
 });
 
 const PORT = process.env.PORT || 3000;
 server.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
 });
-

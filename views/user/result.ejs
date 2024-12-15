@@ -1,26 +1,35 @@
+<!DOCTYPE html>
 <html>
-<head><title>Results for <%= poll.title %></title></head>
+<head>
+  <title>Results for <%= poll.title %></title>
+</head>
 <body>
   <h1>Results: <%= poll.title %></h1>
   <ul id="results">
     <% poll.results.forEach((count, i) => { %>
-      <li><%= poll.options[i] %>: <span class="count"><%= count %></span></li>
+      <li data-index="<%= i %>"><%= poll.options[i] %>: <span class="count"><%= count %></span></li>
     <% }) %>
   </ul>
 
+  <!-- Socket.IOクライアントスクリプト -->
   <script src="/socket.io/socket.io.js"></script>
   <script>
+    const pollId = "<%= pollId %>";
     const socket = io();
-    socket.on('updateResults', (newResults) => {
-      const resultEls = document.querySelectorAll('#results li .count');
-      newResults.forEach((count, i) => {
-        resultEls[i].textContent = count;
-      });
-    });
 
-    // ページ読み込み時にサーバーへ自分が見ている投票IDを通知し、現在の結果を更新させることも可能。
-    // ここではvoteイベントで通知するなど必要に応じて。
+    // updateResultsイベントを受信したら、該当pollIdのものなら更新
+    socket.on('updateResults', (data) => {
+      if (data.pollId === pollId) {
+        const newResults = data.results;
+        const resultEls = document.querySelectorAll('#results li');
+        newResults.forEach((count, i) => {
+          const li = document.querySelector(`#results li[data-index="${i}"] .count`);
+          if (li) {
+            li.textContent = count;
+          }
+        });
+      }
+    });
   </script>
 </body>
 </html>
-
