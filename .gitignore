@@ -7,7 +7,8 @@ node_modules/
 data/*.json
 
 # publicディレクトリ内に生成されるQRコード画像ファイルのみignore
-public/qrcode_*.png
+# とりあえず最初はignoreされないように
+# public/qrcode_*.png
 
 # その他のログや一時ファイルがあれば適宜ignore
 *.log
